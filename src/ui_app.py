@@ -5,9 +5,9 @@ from ui_popup import AlertPopup
 import sys
 
 class FourEyesApp:
-    def _init_(self):
+    def __init__(self):
         self.root = tk.Tk()
-        self.root.title("4 Eyes 👁👁")
+        self.root.title("4 Eyes 👁️👁️")
         self.root.geometry("400x300")
         self.root.resizable(False, False)
         
@@ -41,7 +41,7 @@ class FourEyesApp:
         # Title with emoji
         title_label = tk.Label(
             main_frame,
-            text="4 Eyes 👁👁",
+            text="4 Eyes 👁️👁️",
             font=("Arial", 28, "bold"),
             bg="#2C3E50",
             fg="#ECF0F1"
@@ -184,6 +184,17 @@ class FourEyesApp:
         print("Press 'q' to quit")
         self.root.mainloop()
 
-if __name__ == "_main_":
-    app = FourEyesApp()
-    app.run()
+if __name__ == "__main__":
+    try:
+        print("=" * 50)
+        print("Starting 4 Eyes Application...")
+        print("=" * 50)
+        app = FourEyesApp()
+        app.run()
+    except Exception as e:
+        print(f"\nERROR: Application failed to start!")
+        print(f"Error details: {e}")
+        import traceback
+        traceback.print_exc()
+        input("\nPress Enter to exit...")
+        sys.exit(1)

@@ -184,6 +184,6 @@ class FourEyesApp:
         print("Press 'q' to quit")
         self.root.mainloop()
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     app = FourEyesApp()
     app.run()

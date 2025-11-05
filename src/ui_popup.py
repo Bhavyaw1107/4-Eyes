@@ -1,3 +1,4 @@
+#src/ui_popup.py
 import tkinter as tk
 from tkinter import font
 import pyautogui
@@ -7,6 +8,14 @@ class AlertPopup:
     def __init__(self):
         self.popup_window = None
         self.is_visible = False
+        
+        # Modern color scheme
+        self.bg_color = "#ff4757"
+        self.dark_bg = "#ee5a6f"
+        self.text_color = "#ffffff"
+        self.button_primary = "#2ed573"
+        self.button_secondary = "#1e90ff"
+        self.button_tertiary = "#ffa502"
     
     def show_alert(self):
         """Show the alert popup"""
@@ -17,17 +26,15 @@ class AlertPopup:
         
         # Create popup window
         self.popup_window = tk.Toplevel()
-        self.popup_window.title("4 Eyes Alert")
+        self.popup_window.title("Privacy Alert")
         
-        # Make window stay on top
+        # Window properties
         self.popup_window.attributes('-topmost', True)
-        
-        # Remove window decorations for cleaner look
         self.popup_window.overrideredirect(True)
         
-        # Set window size
-        window_width = 600
-        window_height = 250
+        # Window dimensions
+        window_width = 650
+        window_height = 380
         
         # Center on screen
         screen_width = self.popup_window.winfo_screenwidth()
@@ -36,112 +43,171 @@ class AlertPopup:
         y = (screen_height - window_height) // 2
         
         self.popup_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        self.popup_window.configure(bg=self.bg_color)
         
-        # Set background color (warning orange/red)
-        bg_color = "#FF6B6B"
-        self.popup_window.configure(bg=bg_color)
-        
-        # Add border
+        # Shadow/border effect
         border_frame = tk.Frame(
-            self.popup_window, 
-            bg="#D63031", 
-            bd=0, 
-            highlightthickness=3,
-            highlightbackground="#D63031"
+            self.popup_window,
+            bg="#c23616",
+            bd=0
         )
-        border_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        border_frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
         
         # Main content frame
-        content_frame = tk.Frame(border_frame, bg=bg_color, padx=20, pady=20)
+        content_frame = tk.Frame(border_frame, bg=self.bg_color, padx=30, pady=30)
         content_frame.pack(fill=tk.BOTH, expand=True)
         
-        # Alert icon/emoji
-        icon_label = tk.Label(
-            content_frame,
-            text="👁️👁️ ⚠️",
-            font=("Arial", 32),
-            bg=bg_color,
-            fg="white"
-        )
-        icon_label.pack(pady=(0, 10))
+        # Warning icon container
+        icon_container = tk.Frame(content_frame, bg=self.dark_bg, relief=tk.FLAT)
+        icon_container.pack(pady=(0, 20))
         
-        # Main warning text (Hindi)
-        main_text = "Dhyan se bhai piche koi dekh raha hai\nteri screen ki taraf!"
+        # Single eye icon in the middle
+        icon_label = tk.Label(
+            icon_container,
+            text="👁️",
+            font=("Arial", 48),
+            bg=self.dark_bg,
+            fg=self.text_color,
+            padx=30,
+            pady=15
+        )
+        icon_label.pack()
+        
+        # Alert title
+        title_label = tk.Label(
+            content_frame,
+            text="⚠️ PRIVACY ALERT",
+            font=("Segoe UI", 20, "bold"),
+            bg=self.bg_color,
+            fg=self.text_color
+        )
+        title_label.pack(pady=(0, 15))
+        
+        # Main warning text
+        main_text = "Dhyan se bhai! Piche koi dekh raha hai\nteri screen ki taraf!"
         main_label = tk.Label(
             content_frame,
             text=main_text,
-            font=("Arial", 16, "bold"),
-            bg=bg_color,
-            fg="white",
+            font=("Segoe UI", 15, "bold"),
+            bg=self.bg_color,
+            fg=self.text_color,
             justify=tk.CENTER
         )
-        main_label.pack(pady=(0, 15))
+        main_label.pack(pady=(0, 10))
         
         # Subtext
-        subtext = "4 Eyes ne detect kiya — agar tu kaam chahte hai\ntoh 'Back' dabao."
+        subtext = "4 Eyes ne detect kiya — Choose your action wisely"
         sub_label = tk.Label(
             content_frame,
             text=subtext,
-            font=("Arial", 11),
-            bg=bg_color,
-            fg="white",
+            font=("Segoe UI", 11),
+            bg=self.bg_color,
+            fg="#ffe5e5",
             justify=tk.CENTER
         )
-        sub_label.pack(pady=(0, 20))
+        sub_label.pack(pady=(0, 25))
         
-        # Button frame
-        button_frame = tk.Frame(content_frame, bg=bg_color)
-        button_frame.pack()
+        # Button frame (3 buttons in a row)
+        button_frame = tk.Frame(content_frame, bg=self.bg_color)
+        button_frame.pack(pady=(0, 10))
         
-        # Chalega button
-        chalega_btn = tk.Button(
+        # Button styling function
+        def create_button(parent, text, bg_color, hover_color, command):
+            btn = tk.Button(
+                parent,
+                text=text,
+                font=("Segoe UI", 11, "bold"),
+                bg=bg_color,
+                fg="white",
+                activebackground=hover_color,
+                activeforeground="white",
+                relief=tk.FLAT,
+                bd=0,
+                padx=25,
+                pady=12,
+                cursor="hand2",
+                command=command
+            )
+            
+            # Hover effects
+            btn.bind('<Enter>', lambda e: btn.config(bg=hover_color))
+            btn.bind('<Leave>', lambda e: btn.config(bg=bg_color))
+            
+            return btn
+        
+        # Chalega button (dismiss)
+        chalega_btn = create_button(
             button_frame,
-            text="Chalega",
-            font=("Arial", 12, "bold"),
-            bg="#00B894",
-            fg="white",
-            activebackground="#00A383",
-            activeforeground="white",
-            relief=tk.FLAT,
-            padx=30,
-            pady=10,
-            cursor="hand2",
-            command=self._on_chalega_click
+            "Chalega",
+            self.button_primary,
+            "#26de81",
+            self._on_chalega_click
         )
-        chalega_btn.pack(side=tk.LEFT, padx=10)
+        chalega_btn.pack(side=tk.LEFT, padx=8)
         
-        # Back button
-        back_btn = tk.Button(
+        # Lock Screen button (middle)
+        lock_btn = create_button(
             button_frame,
-            text="Back",
-            font=("Arial", 12, "bold"),
-            bg="#0984E3",
-            fg="white",
-            activebackground="#0770C4",
-            activeforeground="white",
-            relief=tk.FLAT,
-            padx=30,
-            pady=10,
-            cursor="hand2",
-            command=self._on_back_click
+            "Lock Screen",
+            self.button_tertiary,
+            "#ff9234",
+            self._on_lock_click
         )
-        back_btn.pack(side=tk.LEFT, padx=10)
+        lock_btn.pack(side=tk.LEFT, padx=8)
         
-        # Bind escape key to close
+        # Show Desktop button
+        desktop_btn = create_button(
+            button_frame,
+            "Show Desktop",
+            self.button_secondary,
+            "#3742fa",
+            self._on_back_click
+        )
+        desktop_btn.pack(side=tk.LEFT, padx=8)
+        
+        # Keyboard shortcuts info
+        shortcut_label = tk.Label(
+            content_frame,
+            text="ESC to dismiss",
+            font=("Segoe UI", 8),
+            bg=self.bg_color,
+            fg="#ffe5e5"
+        )
+        shortcut_label.pack(pady=(10, 0))
+        
+        # Bind escape key
         self.popup_window.bind('<Escape>', lambda e: self._on_chalega_click())
         
-        # Focus the window
+        # Focus window
         self.popup_window.focus_force()
     
     def _on_chalega_click(self):
-        """Handle Chalega button click - just dismiss popup"""
+        """Handle Chalega button - just dismiss popup"""
         self.hide_alert()
     
-    def _on_back_click(self):
-        """Handle Back button click - minimize all windows"""
+    def _on_lock_click(self):
+        """Handle Lock Screen button - lock the computer"""
         self.hide_alert()
         
-        # Show desktop based on OS
+        system = platform.system()
+        
+        try:
+            if system == "Windows":
+                # Windows: Win+L to lock
+                pyautogui.hotkey('win', 'l')
+            elif system == "Darwin":  # macOS
+                # macOS: Control+Command+Q to lock
+                pyautogui.hotkey('ctrl', 'command', 'q')
+            else:  # Linux
+                # Linux: Ctrl+Alt+L to lock (common in many DEs)
+                pyautogui.hotkey('ctrl', 'alt', 'l')
+        except Exception as e:
+            print(f"Error locking screen: {e}")
+    
+    def _on_back_click(self):
+        """Handle Show Desktop button - minimize all windows"""
+        self.hide_alert()
+        
         system = platform.system()
         
         try:
@@ -152,7 +218,7 @@ class AlertPopup:
                 # macOS: F11 or Mission Control
                 pyautogui.hotkey('fn', 'f11')
             else:  # Linux
-                # Linux: Ctrl+Alt+D or Super+D depending on desktop environment
+                # Linux: Ctrl+Alt+D or Super+D
                 try:
                     pyautogui.hotkey('ctrl', 'alt', 'd')
                 except:

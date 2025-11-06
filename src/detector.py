@@ -2,9 +2,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-# Configuration Constants - yeh values tune kar sakte ho
-GAZE_THRESHOLD_CENTER = 0.35  # Kitna center me dekhna chahiye (kam value = zyada strict)
-PERIPHERAL_MARGIN = 0.25       # Peripheral vision ka margin
+GAZE_THRESHOLD_CENTER = 0.35  # Kitna center me dekhna chahiye 
 MIN_EYE_VISIBILITY = 0.4       # Minimum eye visibility required
 
 class FaceDetector:
@@ -63,7 +61,7 @@ class FaceDetector:
             norm_y = (iris_y - eye_top) / (eye_bottom - eye_top)
         else:
             norm_y = 0.5  # Default center
-        
+        # Ye batata hai Iris kitna centre me dekh rha hai
         return norm_x, norm_y
     
     def is_looking_at_camera(self, left_iris_pos, right_iris_pos):
@@ -99,18 +97,8 @@ class FaceDetector:
     def analyze_frame(self, frame):
         """
         Frame ko analyze karo - faces aur gaze direction detect karo
-        
-        YEH FUNCTION SABSE IMPORTANT HAI - yaha pe multi-face detection hota hai!
-        
-        Returns:
-            dict: {
-                "face_count": kitne faces hain,
-                "peeking": koi dekh raha hai ya nahi (True/False),
-                "confidence": kitna confident hain (0.0 to 1.0),
-                "reason": kyun detect hua ya nahi hua,
-            }
+        Ye function multiple faces ko detect karta hai 
         """
-        # Agar frame hi nahi hai to kya karenge
         if frame is None:
             return {
                 "face_count": 0,
@@ -208,5 +196,4 @@ class FaceDetector:
         }
     
     def cleanup(self):
-        """Resources release karo - memory free karne ke liye"""
         self.face_mesh.close()

@@ -5,7 +5,7 @@ from ui_popup import AlertPopup
 import sys
 import platform
 
-class FourEyesApp:
+class KaunHaiBe:
     def __init__(self):
         # Main window banao
         self.root = tk.Tk()
@@ -77,7 +77,7 @@ class FourEyesApp:
         # Subtitle - description
         subtitle_label = tk.Label(
             title_frame,
-            text="Peeche Dekhnewale Ko Pakdo",
+            text="Ab har nazar pe nazar hai",
             font=("Segoe UI", 12),
             bg=self.bg_primary,
             fg=self.text_secondary
@@ -250,7 +250,7 @@ if __name__ == "__main__":
         print("=" * 50)
         print("Starting KaunHaiBe Application...")
         print("=" * 50)
-        app = FourEyesApp()
+        app = KaunHaiBe()
         app.run()
     except Exception as e:
         print(f"\n❌ ERROR: Application fail ho gayi!")

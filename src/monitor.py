@@ -4,8 +4,8 @@ import threading
 from detector import FaceDetector
 
 # Configuration Constants - settings yaha adjust kar sakte ho
-REQUIRED_SECONDS = 5  # Kitne seconds tak dekhna chahiye alert ke liye
-FPS_EST = 20          # Target frame rate - performance ke liye
+REQUIRED_SECONDS = 5  # Matlab koi agar 5 seconds tak continuously screen dekhta rahe, tabhi alert trigger hoga
+FPS_EST = 20          # System per second 20 frames (images) analyze karega
 
 class Monitor:
     def __init__(self, webcam_index=0, required_seconds=REQUIRED_SECONDS):

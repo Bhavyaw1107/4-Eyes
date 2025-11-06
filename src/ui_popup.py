@@ -141,7 +141,7 @@ class AlertPopup:
             print("✓ Monitoring successfully deactivate ho gayi")
     
     def _on_minimize_click(self):
-        """Minimize Page button click - current window minimize karo (Windows only)"""
+        """Minimize Page button click - current window minimize karo"""
         print("→ User ne 'Minimize Page' click kiya - windows minimize ho rahi hain")
         self.hide_alert()  # Pehle popup band karo
         

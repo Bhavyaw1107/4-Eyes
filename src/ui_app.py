@@ -3,14 +3,27 @@ from tkinter import font, messagebox
 from monitor import Monitor
 from ui_popup import AlertPopup
 import sys
+import platform
 
 class FourEyesApp:
     def __init__(self):
         # Main window banao
         self.root = tk.Tk()
         self.root.title("KaunHaiBe!")
-        self.root.geometry("500x500")
+        self.root.geometry("500x400")
         self.root.resizable(False, False)
+        
+        # Check karo ki Windows hai ya nahi
+        self.is_windows = platform.system() == "Windows"
+        
+        if not self.is_windows:
+            # Agar Windows nahi hai to warning dikha do
+            messagebox.showwarning(
+                "Platform Warning",
+                f"Yeh application sirf Windows ke liye banaya gaya hai.\n\n"
+                f"Current OS: {platform.system()}\n\n"
+                f"Kuch features kaam nahi karenge."
+            )
         
         # Modern gradient-style colors - Dark purple se light purple
         self.bg_primary = "#1a1a2e"      # Deep dark blue-purple
@@ -27,6 +40,7 @@ class FourEyesApp:
         self.monitor = Monitor()
         self.monitor.register_callback(self._on_alert_event)
         self.popup = AlertPopup()
+        self.popup.register_deactivate_callback(self._deactivate_monitoring)  # Chalega button ke liye
         
         self.is_active = False
         
@@ -63,7 +77,7 @@ class FourEyesApp:
         # Subtitle - description
         subtitle_label = tk.Label(
             title_frame,
-            text="Ab har nazar pe nazar hai",
+            text="Peeche Dekhnewale Ko Pakdo",
             font=("Segoe UI", 12),
             bg=self.bg_primary,
             fg=self.text_secondary
@@ -117,6 +131,30 @@ class FourEyesApp:
             command=self._toggle_monitoring
         )
         self.toggle_button.pack()
+    
+    def _deactivate_monitoring(self):
+        """
+        Monitoring ko deactivate karo - Chalega button se call hoga
+        Yeh function monitoring band karega without button click
+        """
+        if self.is_active:
+            # Monitoring band karo
+            self.monitor.stop()
+            self.popup.hide_alert()  # Agar popup khula hai to band karo
+            self.is_active = False
+            
+            # Button ko wapas original state me lao
+            self.toggle_button.config(
+                text="Activate",
+                bg=self.button_color
+            )
+            # Status indicator ko gray karo
+            self.status_dot.config(fg="#5a5a5a")
+            self.status_label.config(
+                text="Abhi Band Hai",
+                fg=self.text_secondary
+            )
+            print("✗ Monitoring deactivate ho gayi (Chalega button se)")
     
     def _toggle_monitoring(self):
         """Monitoring ko on/off karo - button click pe"""
@@ -203,6 +241,12 @@ class FourEyesApp:
 # Main entry point - yaha se program start hota hai
 if __name__ == "__main__":
     try:
+        # Check karo Windows hai ya nahi
+        if platform.system() != "Windows":
+            print("⚠ WARNING: Yeh application sirf Windows ke liye banaya gaya hai.")
+            print(f"   Current OS: {platform.system()}")
+            print("   Kuch features kaam nahi karenge.\n")
+        
         print("=" * 50)
         print("Starting KaunHaiBe Application...")
         print("=" * 50)

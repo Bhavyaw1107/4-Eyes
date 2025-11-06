@@ -9,27 +9,27 @@ class AlertPopup:
         self.is_visible = False
     
     def show_alert(self):
-        """Show the alert popup"""
+        """Alert popup dikhao - jab koi screen dekh raha ho"""
         if self.is_visible:
-            return
+            return  # Agar pehle se dikha hua hai to dobara mat dikhao
         
         self.is_visible = True
         
-        # Create popup window
+        # Popup window create karo
         self.popup_window = tk.Toplevel()
-        self.popup_window.title("4 Eyes Alert")
+        self.popup_window.title("Alert!")
         
-        # Make window stay on top
+        # Window ko sabse upar rakho - kisi bhi window ke upar dikhe
         self.popup_window.attributes('-topmost', True)
         
-        # Remove window decorations for cleaner look
+        # Window decorations hata do - cleaner look ke liye
         self.popup_window.overrideredirect(True)
         
-        # Set window size
-        window_width = 600
-        window_height = 250
+        # Window size set karo
+        window_width = 700
+        window_height = 280
         
-        # Center on screen
+        # Screen ke center me rakho
         screen_width = self.popup_window.winfo_screenwidth()
         screen_height = self.popup_window.winfo_screenheight()
         x = (screen_width - window_width) // 2
@@ -37,143 +37,141 @@ class AlertPopup:
         
         self.popup_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         
-        # Set background color (warning orange/red)
-        bg_color = "#FF6B6B"
-        self.popup_window.configure(bg=bg_color)
+        # Modern color scheme - Warning orange/red gradient
+        bg_gradient_top = "#ff6b6b"    # Light red
+        bg_gradient_bottom = "#ee5a6f"  # Deeper red
+        border_color = "#c44569"        # Dark red border
         
-        # Add border
+        self.popup_window.configure(bg=bg_gradient_top)
+        
+        # Outer border frame - 3D effect ke liye
         border_frame = tk.Frame(
-            self.popup_window, 
-            bg="#D63031", 
-            bd=0, 
-            highlightthickness=3,
-            highlightbackground="#D63031"
+            self.popup_window,
+            bg=border_color,
+            bd=0
         )
-        border_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        border_frame.pack(fill=tk.BOTH, expand=True, padx=6, pady=6)
         
-        # Main content frame
-        content_frame = tk.Frame(border_frame, bg=bg_color, padx=20, pady=20)
+        # Inner content frame
+        content_frame = tk.Frame(border_frame, bg=bg_gradient_top, padx=25, pady=25)
         content_frame.pack(fill=tk.BOTH, expand=True)
         
-        # Alert icon/emoji
-        icon_label = tk.Label(
+        # Warning title - main heading
+        title_label = tk.Label(
             content_frame,
-            text="👁️👁️ ⚠️",
-            font=("Arial", 32),
-            bg=bg_color,
-            fg="white"
-        )
-        icon_label.pack(pady=(0, 10))
-        
-        # Main warning text (Hindi)
-        main_text = "Dhyan se bhai piche koi dekh raha hai\nteri screen ki taraf!"
-        main_label = tk.Label(
-            content_frame,
-            text=main_text,
-            font=("Arial", 16, "bold"),
-            bg=bg_color,
+            text="Dhyan se bhai koi tere PC ko\npiche se dekh raha hai!",
+            font=("Segoe UI", 20, "bold"),
+            bg=bg_gradient_top,
             fg="white",
             justify=tk.CENTER
         )
-        main_label.pack(pady=(0, 15))
+        title_label.pack(pady=(10, 20))
         
-        # Subtext
-        subtext = "4 Eyes ne detect kiya — agar tu kaam chahte hai\ntoh 'Back' dabao."
+        # Subtext - additional info
+        subtext = "KaunHaiBe ne pakad liya! Privacy chahiye to action lo."
         sub_label = tk.Label(
             content_frame,
             text=subtext,
-            font=("Arial", 11),
-            bg=bg_color,
-            fg="white",
+            font=("Segoe UI", 12),
+            bg=bg_gradient_top,
+            fg="#fff9f9",
             justify=tk.CENTER
         )
-        sub_label.pack(pady=(0, 20))
+        sub_label.pack(pady=(0, 25))
         
-        # Button frame
-        button_frame = tk.Frame(content_frame, bg=bg_color)
+        # Button container - dono buttons yaha rahenge
+        button_frame = tk.Frame(content_frame, bg=bg_gradient_top)
         button_frame.pack()
         
-        # Chalega button
+        # Button 1: Chalega - popup dismiss karne ke liye
         chalega_btn = tk.Button(
             button_frame,
             text="Chalega",
-            font=("Arial", 12, "bold"),
-            bg="#00B894",
+            font=("Segoe UI", 13, "bold"),
+            bg="#00b894",  # Green
             fg="white",
-            activebackground="#00A383",
+            activebackground="#00a383",
             activeforeground="white",
             relief=tk.FLAT,
-            padx=30,
-            pady=10,
+            padx=40,
+            pady=12,
             cursor="hand2",
+            borderwidth=0,
             command=self._on_chalega_click
         )
-        chalega_btn.pack(side=tk.LEFT, padx=10)
+        chalega_btn.pack(side=tk.LEFT, padx=12)
         
-        # Back button
-        back_btn = tk.Button(
+        # Button 2: Minimize Page - window minimize karne ke liye
+        minimize_btn = tk.Button(
             button_frame,
-            text="Back",
-            font=("Arial", 12, "bold"),
-            bg="#0984E3",
+            text="Minimize Page",
+            font=("Segoe UI", 13, "bold"),
+            bg="#0984e3",  # Blue
             fg="white",
-            activebackground="#0770C4",
+            activebackground="#0770c4",
             activeforeground="white",
             relief=tk.FLAT,
-            padx=30,
-            pady=10,
+            padx=40,
+            pady=12,
             cursor="hand2",
-            command=self._on_back_click
+            borderwidth=0,
+            command=self._on_minimize_click
         )
-        back_btn.pack(side=tk.LEFT, padx=10)
+        minimize_btn.pack(side=tk.LEFT, padx=12)
         
-        # Bind escape key to close
+        # Escape key se bhi popup band ho sake
         self.popup_window.bind('<Escape>', lambda e: self._on_chalega_click())
         
-        # Focus the window
+        # Window ko focus do
         self.popup_window.focus_force()
     
     def _on_chalega_click(self):
-        """Handle Chalega button click - just dismiss popup"""
+        """Chalega button click - popup band karo aur monitoring chalne do"""
+        print("→ User ne 'Chalega' click kiya - popup band ho rahi hai")
         self.hide_alert()
     
-    def _on_back_click(self):
-        """Handle Back button click - minimize all windows"""
-        self.hide_alert()
+    def _on_minimize_click(self):
+        """Minimize Page button click - current window minimize karo"""
+        print("→ User ne 'Minimize Page' click kiya - windows minimize ho rahi hain")
+        self.hide_alert()  # Pehle popup band karo
         
-        # Show desktop based on OS
+        # OS ke according minimize karo
         system = platform.system()
         
         try:
             if system == "Windows":
-                # Windows: Win+D to show desktop
+                # Windows: Win+D se desktop dikha do
                 pyautogui.hotkey('win', 'd')
+                print("✓ Windows minimize ho gaye")
             elif system == "Darwin":  # macOS
-                # macOS: F11 or Mission Control
-                pyautogui.hotkey('fn', 'f11')
+                # macOS: Command+M ya Mission Control
+                pyautogui.hotkey('command', 'm')
+                print("✓ macOS window minimize ho gayi")
             else:  # Linux
-                # Linux: Ctrl+Alt+D or Super+D depending on desktop environment
+                # Linux: desktop environment ke according
                 try:
-                    pyautogui.hotkey('ctrl', 'alt', 'd')
+                    pyautogui.hotkey('super', 'd')  # Most Linux DEs
                 except:
-                    pyautogui.hotkey('super', 'd')
+                    pyautogui.hotkey('ctrl', 'alt', 'd')  # Fallback
+                print("✓ Linux windows minimize ho gayi")
         except Exception as e:
-            print(f"Error minimizing windows: {e}")
+            print(f"⚠ Warning: Windows minimize nahi ho payi - {e}")
     
     def hide_alert(self):
-        """Hide the alert popup"""
+        """Popup ko hide karo - jab zarurat na ho"""
         if not self.is_visible:
-            return
+            return  # Agar pehle se hi band hai to kuch mat karo
         
         self.is_visible = False
         
         if self.popup_window:
             try:
                 self.popup_window.destroy()
-            except:
-                pass
+                print("✓ Popup successfully band ho gayi")
+            except Exception as e:
+                print(f"⚠ Popup destroy karne me issue: {e}")
             self.popup_window = None
     
     def is_showing(self):
-        """Check if popup is currently visible"""
+        """Check karo ki popup dikha hua hai ya nahi"""
         return self.is_visible

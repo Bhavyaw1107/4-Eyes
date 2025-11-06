@@ -7,6 +7,11 @@ class AlertPopup:
     def __init__(self):
         self.popup_window = None
         self.is_visible = False
+        self.deactivate_callback = None  # Callback to deactivate monitoring
+    
+    def register_deactivate_callback(self, callback):
+        """Register callback to deactivate monitoring - chalega button ke liye"""
+        self.deactivate_callback = callback
     
     def show_alert(self):
         """Alert popup dikhao - jab koi screen dekh raha ho"""
@@ -126,36 +131,32 @@ class AlertPopup:
         self.popup_window.focus_force()
     
     def _on_chalega_click(self):
-        """Chalega button click - popup band karo aur monitoring chalne do"""
-        print("→ User ne 'Chalega' click kiya - popup band ho rahi hai")
+        """Chalega button click - popup band karo AUR monitoring bhi deactivate karo"""
+        print("→ User ne 'Chalega' click kiya - monitoring DEACTIVATE ho rahi hai")
         self.hide_alert()
+        
+        # Monitoring deactivate karo through callback
+        if self.deactivate_callback:
+            self.deactivate_callback()
+            print("✓ Monitoring successfully deactivate ho gayi")
     
     def _on_minimize_click(self):
-        """Minimize Page button click - current window minimize karo"""
+        """Minimize Page button click - current window minimize karo (Windows only)"""
         print("→ User ne 'Minimize Page' click kiya - windows minimize ho rahi hain")
         self.hide_alert()  # Pehle popup band karo
         
-        # OS ke according minimize karo
+        # Sirf Windows ke liye minimize functionality
         system = platform.system()
         
-        try:
-            if system == "Windows":
+        if system == "Windows":
+            try:
                 # Windows: Win+D se desktop dikha do
                 pyautogui.hotkey('win', 'd')
                 print("✓ Windows minimize ho gaye")
-            elif system == "Darwin":  # macOS
-                # macOS: Command+M ya Mission Control
-                pyautogui.hotkey('command', 'm')
-                print("✓ macOS window minimize ho gayi")
-            else:  # Linux
-                # Linux: desktop environment ke according
-                try:
-                    pyautogui.hotkey('super', 'd')  # Most Linux DEs
-                except:
-                    pyautogui.hotkey('ctrl', 'alt', 'd')  # Fallback
-                print("✓ Linux windows minimize ho gayi")
-        except Exception as e:
-            print(f"⚠ Warning: Windows minimize nahi ho payi - {e}")
+            except Exception as e:
+                print(f"⚠ Warning: Windows minimize nahi ho payi - {e}")
+        else:
+            print(f"ℹ Minimize functionality sirf Windows ke liye available hai. Current OS: {system}")
     
     def hide_alert(self):
         """Popup ko hide karo - jab zarurat na ho"""

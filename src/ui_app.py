@@ -10,7 +10,7 @@ class FourEyesApp:
         # Main window banao
         self.root = tk.Tk()
         self.root.title("KaunHaiBe!")
-        self.root.geometry("500x400")
+        self.root.geometry("500x500")
         self.root.resizable(False, False)
         
         # Check karo ki Windows hai ya nahi

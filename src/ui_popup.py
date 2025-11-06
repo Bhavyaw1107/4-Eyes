@@ -32,7 +32,7 @@ class AlertPopup:
         
         # Window size set karo
         window_width = 700
-        window_height = 280
+        window_height = 320
         
         # Screen ke center me rakho
         screen_width = self.popup_window.winfo_screenwidth()
